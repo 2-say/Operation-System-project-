@@ -1,166 +1,247 @@
+from tkinter import *
+
 root = Tk()
 root.title("Hansongyi")
-root.geometry("1200x500")
+root.geometry("1040x900")
 root.option_add("*Font", "맑은고딕 9")
 #root.resizable(False, False)
-
-file_frame = Frame(root)
-file_frame.pack()
+root.configure(bg="#FFFFFF")
 
 # lab_team_project
-lab_team_project = Label(root)
-lab_team_project.config(text="운영체제 3조 이세희 이도형 조경우 한송이")
+lab_team_project = Label(root, bg = "#FFFFFF")
+lab_team_project.config(text="운영체제 3조 이세희 이도형 조경우 한송이", font="맑은고딕 10")
 lab_team_project.pack(side="top", anchor="sw")
 
 # lab_topic
-lab_topic = Label(root)
+lab_topic = Label(root, bg = "#FFFFFF")
 lab_topic.config(text="Scheduling setting", font="맑은고딕 20 bold")
-lab_topic.pack()
+lab_topic.pack(pady = 50)
 
 # INPUT 프레임
-input_frame = Frame(root)
-input_frame.pack(side = "top", fill="both")
+input_frame = Frame(root, bg ="#FFFFFF")
+input_frame.pack(fill = BOTH, pady = 10)
 
-# PROCESS 프레임
-process_frame = LabelFrame(root)
-process_frame.pack(side="top", fill="both", expand=True)
+# PROCESS_ROOT 프레임
+process_root_frame = Frame(root, bg = "#FFFFFF",  height = 4)
+process_root_frame.pack(side="top", fill = "both")
 
-# PROCESSOR 프레임
-processor_frame = LabelFrame(root)
-processor_frame.pack(side="top", fill="both", expand=True)
+
+# PROCESSOR_ROOT 프레임
+processor_root_frame = LabelFrame(root, bg = "#FFFFFF",  height = 4)
+processor_root_frame.pack(side="top",  fill = "both")
 
 # SCHEDULING TYPE 옵션
-lab_scheduling_type = Label(input_frame, text="SCHEDULING TYPE", width=15)
-lab_scheduling_type.grid(column = 1, row = 0, padx = 20, pady = 10)
+lab_scheduling_type = Label(input_frame, text="SCHEDULING TYPE", width=15, bg = "#FFFFFF")
+lab_scheduling_type.config(font="맑은고딕 10")
+lab_scheduling_type.grid(column=1, row=0, padx=10, pady=10)
 
 opt_scheduling_type = ["FCFS", "RR", "SPN", "SRTN", "HRRN"]
 
 cmb_scheduling_type = ttk.Combobox(input_frame, state="readonly", values=opt_scheduling_type, width=8)
 cmb_scheduling_type.current(0)
-cmb_scheduling_type.grid(column = 2, row = 0, padx = 20, pady = 10)
+cmb_scheduling_type.grid(column=2, row=0, padx=10, pady=10)
 
 # TIMEQUANTUM
-lb1_width = Label(input_frame, text="TIMEQUANTUM", width=12)
-lb1_width.grid(column = 3, row = 0, padx = 20, pady = 10)
+lb1_width = Label(input_frame, text="TIMEQUANTUM", width=12, bg = "#FFFFFF")
+lb1_width.config(font="맑은고딕 10")
+lb1_width.grid(column=3, row=0, padx=10, pady=10)
 
 txt = Text(input_frame, width=10, height=1)
-txt.grid(column = 4, row = 0, padx = 20, pady = 10)
+txt.grid(column=4, row=0, padx=10, pady=10)
 
+# core
 p_core = 0
 e_core = 0
 core = []
-i=0; j=0
+
 
 # add p core
 def add_p_core():
     global p_core
     global e_core
     global core
-    global i; global j
     if p_core + e_core < 4:
-        CORE = Label(processor_frame, text="P CORE", width=10, height=3)
-        CORE.grid(column = i, row = j, padx = 10, pady = 6)
-        text = Text(processor_frame, height=3,  padx = 300)
-        i += 1
-        text.grid(column = i, row = j, padx = 10, pady = 6)
-        p_core += 1
-        j += 1
-        i = 0
+        # PROCESSOR 프레임
         core.append('p')
+        processor_frame = LabelFrame(processor_root_frame, height=3, width=950, bg=color[p_core + e_core + 4])
+        processor_frame.pack(side="top", fill = "both")
+
+        # CORE 명
+        CORE = Label(processor_frame, text="P CORE", width=10, bg=color[p_core + e_core + 4])
+        CORE.grid(column=1, row=0, padx=2, pady=4)
+        p_core += 1
+
+        # text 입력
+        text = Text(processor_frame, height=3, padx=230)
+        text.grid(column=2, row=0, padx=10, pady=6)
 
 # add e core
 def add_e_core():
     global p_core
     global e_core
     global core
-    global i; global j
     if p_core + e_core < 4:
-        CORE = Label(processor_frame, text="E CORE", width=10, height=3)
-        CORE.grid(column = i, row = j, padx = 10, pady = 6)
-        text = Text(processor_frame, height=3, padx = 300)
-        i += 1
-        text.grid(column = i, row = j, padx = 10, pady = 6)
-        e_core += 1
-        j += 1
-        i = 0
+        # PROCESSOR 프레임
         core.append('e')
+        processor_frame = LabelFrame(processor_root_frame, height=3, width=950, bg=color[p_core + e_core + 4])
+        processor_frame.pack(side="top", fill = "both")
 
+        # CORE 명
+        CORE = Label(processor_frame, text="E CORE", width=10, bg=color[p_core + e_core + 4])
+        CORE.grid(column=1, row=0, padx=2, pady=4)
+        e_core += 1
+
+        # text 입력
+        text = Text(processor_frame, height=3, padx=230)
+        text.grid(column=2, row=0, padx=10, pady=6)
+
+
+# delete core
 def delete_core():
     global p_core
     global e_core
     global core
     if p_core + e_core > 0:
-        processor_frame.pack_slaves().pop().destroy()
+        processor_root_frame.pack_slaves().pop().destroy()
         if core.pop == 'p':
             p_core -= 1
         else:
             e_core -= 1
 
+
 # P CORE ADD BUTTON
-btn_processorP_add = Button(input_frame, padx=10, pady=5, width=10, text="ADD P CORE")
-btn_processorP_add.grid(column = 5, row = 0, padx = 15, pady = 10)
-btn_processorP_add.config(command = add_p_core)
+btn_processorP_add = Button(input_frame, padx=5, pady=5, width=10, text="ADD P CORE", bg= "#C5CAE9", relief = "groove", overrelief = "solid", bd = 0, activebackground =  "#C5CAE9")
+btn_processorP_add.grid(column=5, row=0, padx=10, pady=10)
+btn_processorP_add.config(command=add_p_core)
 
 # E CORE ADD BUTTON
-btn_processorE_add = Button(input_frame, padx=10, pady=5, width=10, text="ADD E CORE")
-btn_processorE_add.grid(column = 6, row = 0, padx = 15, pady = 10)
-btn_processorE_add.config(command = add_e_core)
+btn_processorE_add = Button(input_frame, padx=5, pady=5, width=10, text="ADD E CORE", bg="#C5CAE9",  relief = "groove", overrelief = "solid", bd = 0, activebackground = "#C5CAE9")
+btn_processorE_add.grid(column=6, row=0, padx=10, pady=10)
+btn_processorE_add.config(command=add_e_core)
 
 # CORE DELETE BUTTON
-btn_processor_delete = Button(input_frame, padx=10, pady=5, width=11, text="CORE DELETE")
-btn_processor_delete.grid(column = 7, row = 0, padx = 15, pady = 10)
-btn_processor_delete.config(command = delete_core)
+btn_processor_delete = Button(input_frame, padx=5, pady=5, width=11, text="CORE DELETE", bg="#C5CAE9",  relief = "groove", overrelief = "solid", bd = 0, activebackground = "#C5CAE9")
+btn_processor_delete.grid(column=7, row=0, padx=10, pady=10)
+btn_processor_delete.config(command=delete_core)
 
+#process_info_frame
+process_info_frame = LabelFrame(process_root_frame, bg = "#FFFFFF", font="맑은고딕 9 bold")
+process_info_frame.pack(side = "top", fill = "both")
+
+lab_process = Label(process_info_frame, text="Process", width=15, bg = "#FFFFFF", font="맑은고딕 9 bold")
+lab_process.grid(column = 0, row = 0, padx = 10, pady = 10)
+
+lab_arrive_T = Label(process_info_frame, text="Arrive Time", width=15, bg = "#FFFFFF", font="맑은고딕 9 bold")
+lab_arrive_T.grid(column = 1, row = 0, padx = 10, pady = 10)
+
+lab_burst_T = Label(process_info_frame, text="Burst Time", width=15, bg = "#FFFFFF", font="맑은고딕 9 bold")
+lab_burst_T.grid(column = 2, row = 0, padx = 10, pady = 10)
+
+lab_waiting_T = Label(process_info_frame, text="Waiting Time", width=20, bg = "#FFFFFF",font="맑은고딕 9 bold")
+lab_waiting_T.grid(column = 3, row = 0, padx = 15, pady = 10)
+
+lab_turnarround_T = Label(process_info_frame, text="Turnaround Time", width=20, bg = "#FFFFFF",font="맑은고딕 9 bold")
+lab_turnarround_T.grid(column = 4, row = 0, padx = 15, pady = 10)
+
+lab_normalized_T = Label(process_info_frame, text="Normalized Turnaround Time", width=30, bg = "#FFFFFF",font="맑은고딕 9 bold")
+lab_normalized_T.grid(column = 5, row = 0, padx = 15, pady = 10)
+
+#스크롤 바 생성
+#scrollbar = Scrollbar(process_root_frame)
+#scrollbar.pack(side = "right", fill = "y")
+
+#set_process 프레임
+#set_process_frame = Frame(process_root_frame)
+#set_process_frame.pack(side = "left", fill = "both")
+
+
+# process
 process = 0
+arrival_time = []
+burst_time = []
+color = ['snow', 'ghost white', 'white smoke', 'gainsboro', 'floral white', 'old lace',
+         'linen', 'antique white', 'papaya whip', 'blanched almond', 'bisque', 'peach puff',
+         'navajo white', 'lemon chiffon', 'mint cream']
 
-# add p process
+# add process
 def add_process():
     global process
-    global i; global j
+    global color
     if process < 15:
-        process += 1
-        PROCESS = Label(process_frame, text=("P", process), width=10)
-        PROCESS.grid(column = i, row = j, padx = 10, pady = 6)
-        PROCESS.pack(side = "left")
+        # PROCESS 프레임  
+        process_frame = LabelFrame(process_root_frame, bg=color[process])
+        process_frame.pack(side = "top", fill = "both")
 
+        # PROCESS 이름
+        PROCESS = Label(process_frame, text=("P", process+1), bg=color[process], width=10, padx = 15)
+        PROCESS.grid(column=1, row=0, padx = 15, pady = 10)
+
+        # Arrival Time
+        TXT_ARRIVAL_TIME = Text(process_frame, width=15, height=1.5, padx = 5)
+        TXT_ARRIVAL_TIME.grid(column=3, row=0, padx=15, pady=10)
+
+        # Burst Time
+        TXT_BURST_TIME = Text(process_frame, width=15, height=1.5, padx = 5)
+        TXT_BURST_TIME.grid(column=5, row=0, padx=15, pady=10)
+        
+        #Waiting Time
+        PROCESS = Label(process_frame, text=("0"), bg=color[process], width=1, padx = 50)
+        PROCESS.grid(column=6, row=0, padx = 15, pady = 10)
+        
+        #Turnarround Time
+        PROCESS = Label(process_frame, text=("3"), bg=color[process], width=10, padx = 50)
+        PROCESS.grid(column=7, row=0, padx = 15, pady = 10)
+        
+        #Normalized Turnarround Time
+        PROCESS = Label(process_frame, text=("1.0"), bg=color[process], width=10, padx = 50)
+        PROCESS.grid(column=8, row=0, padx = 15, pady = 10)
+        
+       # set_process_frame.configure(yscrollcommand = scrollbar.set)
+        #scrollbar.config(command = set_process_list.yview)
+    
+        process += 1
+
+
+# delete process
 def delete_process():
     global process
     if process > 0:
-        process_frame.pack_slaves().pop().destroy()
+        process_root_frame.grid_slaves().pop(0).destroy()
         process -= 1
 
 # PROCESS ADD BUTTON
-btn_process_add = Button(input_frame, padx=10, pady=5, width=5, text="ADD")
-btn_process_add.grid(column = 8, row = 0, padx = 15, pady = 10)
-btn_process_add.config(command = add_process)
+btn_process_add = Button(input_frame, padx=5, pady=5, width=5, text="ADD", bg="#B2EBF2",  relief = "groove", overrelief = "solid", bd = 0,  activebackground = "#B2EBF2")
+btn_process_add.grid(column=8, row=0, padx=10, pady=10)
+btn_process_add.config(command=add_process)
+
 
 # PROCESS DELETE BUTTON
-btn_process_delete = Button(input_frame, padx=10, pady=5, width=5, text="DELETE")
-btn_process_delete.grid(column = 9, row = 0, padx = 15, pady = 10)
-btn_process_delete.config(command = delete_process)
+btn_process_delete = Button(input_frame, padx=5, pady=5, width=5, text="DELETE", bg="#B2EBF2",  relief = "groove", overrelief = "solid", bd = 0,  activebackground = "#B2EBF2")
+btn_process_delete.grid(column=9, row=0, padx=10, pady=10)
+btn_process_delete.config(command=delete_process)
 
 # RUN BUTTON
-btn_run = Button(input_frame, padx=10, pady=5, width=5, text="RUN", bg="yellow")
-btn_run.grid(column = 10, row = 0, padx = 15, pady = 10)
+btn_run = Button(input_frame, padx=5, pady=5, width=5, text="RUN", bg="#FFF9C4",  relief = "groove", overrelief = "solid", bd = 0,  activebackground = "#FFF9C4")
+btn_run.grid(column=10, row=0, padx=10, pady=10)
 
-#Label
-lab_process = Label(process_frame, text="Process", width=20)
-lab_process.grid(column = 0, row = 0, padx = 15, pady = 10)
+# CLEAR all
+def clear():
+    global process
+    global p_core
+    global e_core
+    global core
+    for frame in process_root_frame.grid_slaves():
+        frame.destroy()
+    for frame in processor_root_frame.pack_slaves():
+        frame.destroy()
+    process = 0
+    p_core = 0
+    e_core = 0
+    core.clear()
 
-lab_arrive_T = Label(process_frame, text="Arrive Time", width=20)
-lab_arrive_T.grid(column = 1, row = 0, padx = 15, pady = 10)
-
-lab_burst_T = Label(process_frame, text="Burst Time", width=20)
-lab_burst_T.grid(column = 2, row = 0, padx = 15, pady = 10)
-
-lab_waiting_T = Label(process_frame, text="Waiting Time", width=20)
-lab_waiting_T.grid(column = 3, row = 0, padx = 15, pady = 10)
-
-lab_turnarround_T = Label(process_frame, text="Turnaround Time", width=20)
-lab_turnarround_T.grid(column = 4, row = 0, padx = 15, pady = 10)
-
-lab_normalized_T = Label(process_frame, text="Normalized Turnaround Time", width=30)
-lab_normalized_T.grid(column = 5, row = 0, padx = 15, pady = 10)
-
+# CLEAR BUTTON
+btn_run = Button(input_frame, padx=5, pady=5, width=5, text="CLEAR", bg="#FFCCBC", bd = 0, activebackground = "#FFCCBC")
+btn_run.grid(column=11, row=0, padx=10, pady=10)
+btn_run.config(command = clear)
 
 root.mainloop()
