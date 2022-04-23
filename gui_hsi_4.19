@@ -4,7 +4,7 @@ root = Tk()
 root.title("Hansongyi")
 root.geometry("1040x900")
 root.option_add("*Font", "맑은고딕 9")
-#root.resizable(False, False)
+root.resizable(False, False)
 root.configure(bg="#FFFFFF")
 
 # lab_team_project
@@ -22,12 +22,12 @@ input_frame = Frame(root, bg ="#FFFFFF")
 input_frame.pack(fill = BOTH, pady = 10)
 
 # PROCESS_ROOT 프레임
-process_root_frame = Frame(root, bg = "#FFFFFF",  height = 4)
+process_root_frame = Frame(root, bg = "#FFFFFF")
 process_root_frame.pack(side="top", fill = "both")
 
 
 # PROCESSOR_ROOT 프레임
-processor_root_frame = LabelFrame(root, bg = "#FFFFFF",  height = 4)
+processor_root_frame = LabelFrame(root, bg = "#FFFFFF")
 processor_root_frame.pack(side="top",  fill = "both")
 
 # SCHEDULING TYPE 옵션
@@ -146,15 +146,6 @@ lab_turnarround_T.grid(column = 4, row = 0, padx = 15, pady = 10)
 lab_normalized_T = Label(process_info_frame, text="Normalized Turnaround Time", width=30, bg = "#FFFFFF",font="맑은고딕 9 bold")
 lab_normalized_T.grid(column = 5, row = 0, padx = 15, pady = 10)
 
-#스크롤 바 생성
-#scrollbar = Scrollbar(process_root_frame)
-#scrollbar.pack(side = "right", fill = "y")
-
-#set_process 프레임
-#set_process_frame = Frame(process_root_frame)
-#set_process_frame.pack(side = "left", fill = "both")
-
-
 # process
 process = 0
 arrival_time = []
@@ -169,20 +160,20 @@ def add_process():
     global color
     if process < 15:
         # PROCESS 프레임  
-        process_frame = LabelFrame(process_root_frame, bg=color[process])
+        process_frame = LabelFrame(frame, bg=color[process])
         process_frame.pack(side = "top", fill = "both")
 
         # PROCESS 이름
         PROCESS = Label(process_frame, text=("P", process+1), bg=color[process], width=10, padx = 15)
-        PROCESS.grid(column=1, row=0, padx = 15, pady = 10)
+        PROCESS.grid(column=0, row=0, padx = 15, pady = 10)
 
         # Arrival Time
         TXT_ARRIVAL_TIME = Text(process_frame, width=15, height=1.5, padx = 5)
-        TXT_ARRIVAL_TIME.grid(column=3, row=0, padx=15, pady=10)
+        TXT_ARRIVAL_TIME.grid(column=1, row=0, padx=15, pady=10)
 
         # Burst Time
         TXT_BURST_TIME = Text(process_frame, width=15, height=1.5, padx = 5)
-        TXT_BURST_TIME.grid(column=5, row=0, padx=15, pady=10)
+        TXT_BURST_TIME.grid(column=2, row=0, padx=15, pady=10)
         
         #Waiting Time
         PROCESS = Label(process_frame, text=("0"), bg=color[process], width=1, padx = 50)
@@ -196,8 +187,6 @@ def add_process():
         PROCESS = Label(process_frame, text=("1.0"), bg=color[process], width=10, padx = 50)
         PROCESS.grid(column=8, row=0, padx = 15, pady = 10)
         
-       # set_process_frame.configure(yscrollcommand = scrollbar.set)
-        #scrollbar.config(command = set_process_list.yview)
     
         process += 1
 
@@ -209,11 +198,25 @@ def delete_process():
         process_root_frame.grid_slaves().pop(0).destroy()
         process -= 1
 
+def myfunction(event):
+    canvas.configure(scrollregion=canvas.bbox("all"), width = 950, bg = "white")
+
+#Canvas 생성
+canvas=Canvas(process_root_frame, bg = "white", relief = "flat", bd =0)
+frame=Frame(canvas)
+#스크롤바 생성
+myscrollbar=Scrollbar(process_root_frame,orient="vertical",command=canvas.yview)
+canvas.configure(yscrollcommand=myscrollbar.set)
+
+myscrollbar.pack(side="right",fill="y")
+canvas.pack(side="left")
+canvas.create_window((0,0),window=frame,anchor= NW)
+frame.bind("<Configure>",myfunction)
+
 # PROCESS ADD BUTTON
 btn_process_add = Button(input_frame, padx=5, pady=5, width=5, text="ADD", bg="#B2EBF2",  relief = "groove", overrelief = "solid", bd = 0,  activebackground = "#B2EBF2")
 btn_process_add.grid(column=8, row=0, padx=10, pady=10)
 btn_process_add.config(command=add_process)
-
 
 # PROCESS DELETE BUTTON
 btn_process_delete = Button(input_frame, padx=5, pady=5, width=5, text="DELETE", bg="#B2EBF2",  relief = "groove", overrelief = "solid", bd = 0,  activebackground = "#B2EBF2")
@@ -230,7 +233,7 @@ def clear():
     global p_core
     global e_core
     global core
-    for frame in process_root_frame.grid_slaves():
+    for frame in process_root_frame.pack_slaves()():
         frame.destroy()
     for frame in processor_root_frame.pack_slaves():
         frame.destroy()
