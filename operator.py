@@ -1,6 +1,7 @@
 from locale import normalize
 import FCFS
 import pprint
+import RR
 
 from time_calculator import turnaround_time  #이쁘게 출력하기 위한 (필요 없음)
 
@@ -21,7 +22,7 @@ def main():
         waiting_time = 0
         normalize_time=0
 
-
+    
         status = int(input("현재 상태 : "))  
 
         if status == 0 :  
@@ -33,8 +34,13 @@ def main():
     
 
         #FCFS input and output 
-        gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = FCFS.fcfs(at, bt, processor_number, gt)
+        #gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = FCFS.fcfs(at, bt, processor_number, gt)
 
+
+        #Round Robin input and output
+        gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = RR.rr(at, bt, processor_number, gt)
+
+        
 
         print("------------------------------------------------")
         print(*gantt_chart, sep='\n')  #gantt print \n 
@@ -71,3 +77,5 @@ def get_core(pn, gt) :
         
 if __name__ == "__main__" :
     main()
+
+

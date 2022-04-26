@@ -6,10 +6,11 @@ def rr(at, bt, pn,  gantt_default) :
     time_quantum = 2
     bt_copy = copy.deepcopy(bt)
     ready_queue = []            # 레디 큐
+    tq_wait_queue = []
     line = [None] * len(at)     # 라인 리스트 (연속적인 입력을 위한 기억 리스트)
     timer = 0                   # 타이머
     end_time =[None] * len(at)  #end_time
-    t_q_counter = [time_quantum * pn]
+    t_q_counter = [time_quantum] * pn
 
     gantt = [["" for j in range(sum(bt)+10)] for j in range(pn)]     #make empty gantt 2 dimensional list   
 
@@ -22,7 +23,10 @@ def rr(at, bt, pn,  gantt_default) :
         used_core = 0           # 전력이 소비된 프로세서
         
         if timer in at :        # Arrival_Time -> Ready_Queue
-            ready_queue.append(at.index(timer)) 
+            ready_queue.append(at.index(timer))
+
+        while len(tq_wait_queue) != 0 :
+            ready_queue.append(tq_wait_queue.pop(0))
 
         for processor_n in range(pn) :  # Processor(Core) -> 0부터 시작
             
@@ -39,9 +43,7 @@ def rr(at, bt, pn,  gantt_default) :
                     if t_q_counter[processor_n] == 0 :
                         line[process_num] = 'None'
                         if bt[process_num] > 0 :
-                            ready_queue.append(process_num)
-                            if len(ready_queue) == 1 :
-                                break
+                            tq_wait_queue.append(process_num)
                         else :
                             end_time[process_num] = timer + 1
                         
@@ -88,7 +90,6 @@ def rr(at, bt, pn,  gantt_default) :
 
                 if bt[process_num] > 0  :
                     line[process_num] = processor_n  #해당 번째 processor를 다음에도 사용하겠습니다.
-                    print("오류 시발 :",processor_n)
                     t_q_counter[processor_n] -= 1
                 else :
                     end_time[process_num] = timer + 1
@@ -100,6 +101,7 @@ def rr(at, bt, pn,  gantt_default) :
             
         if max(bt) <= 0 :
             break
+    
         
         timer += 1
 
