@@ -11,13 +11,11 @@ def waiting_time(tt, bt) :
 def turnaround_time(at, et) : 
     tt = [None] * len(at)  #out of range issue problem 
     #tt = []
-    print(et) 
     for i in range(0,len(at)):
         tt[i] = et[i] - at[i] 
     return tt
 
 def normalized_tt(tt, bt) :
-    print(bt)
     ntt= [None] * len(bt)
     #ntt = [] 
     for i in range(0,len(bt)):
