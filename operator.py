@@ -8,7 +8,6 @@ from time_calculator import turnaround_time  #이쁘게 출력하기 위한 (필
 
 def main():
 
-    
     processor_number = 0    # Processor(Core) 개수
     gantt_type = []         # P, E코어
     
@@ -17,12 +16,15 @@ def main():
         status = -1     # 상태 (default : -1, add: 0, delete : 1, add Core : 2)
         power_used = 0  # 전력 소모량
         scheduling = -1 # 스케줄링 종류 (default : -1, FCFS : 1, RR : 2 ...) 
+        
+        
         round_robin = False;    # Round Robin 여부
         turn_around_time = 0
         waiting_time = 0
         normalize_time=0
 
-    
+        
+
         status = int(input("현재 상태 : "))  
 
         if status == 0 :  
@@ -37,9 +39,9 @@ def main():
         #gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = FCFS.fcfs(at, bt, processor_number, gt)
 
 
-        #Round Robin input and output
-        gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = RR.rr(at, bt, processor_number, gt)
-
+        #Round Robin input and output (at, bt, pn, time_quantum, gt)
+        gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = RR.rr(at, bt, processor_number,2, gt)
+        #time_quantum = 2 임의 설정
         
 
         print("------------------------------------------------")
@@ -49,7 +51,6 @@ def main():
         print("Turn around Time: ",turn_around_time)
         print("Waiting Time: ",waiting_time)
         print("Nomalize Time: ",normalize_time)
-
         print("------------------------------------------------")
     
 def get_info(rr):
@@ -59,14 +60,14 @@ def get_info(rr):
     # 실행 시간 입력
     burst_time = list(map(int, input("Burst Time :").split()))
     
-    if rr == True : # Round-Robin일 때 Time-Quantum 입력 받음
+    # Round-Robin일 때 Time-Quantum 입력 받음
+    if rr == True :
         time_quantum = int(input("Time Quantum : "))
-        
     return arrival_time, burst_time
         
+
 def get_core(pn, gt) :
     core_type = input("Core Type : ")
-    
     if core_type == 'P' :
         pn += 1
         gt.append('P')

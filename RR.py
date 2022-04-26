@@ -2,20 +2,20 @@ import col_gantt
 import time_calculator
 import copy
 
-def rr(at, bt, pn,  gantt_default) :  
-    time_quantum = 2
-    bt_copy = copy.deepcopy(bt)
+
+def rr(at, bt, pn, time_quantum ,gantt_default) :  
+    bt_copy = copy.deepcopy(bt) #waiting , ntt를 계산하기 위해 원복 복사 
     ready_queue = []            # 레디 큐
-    tq_wait_queue = []
     line = [None] * len(at)     # 라인 리스트 (연속적인 입력을 위한 기억 리스트)
     timer = 0                   # 타이머
     end_time =[None] * len(at)  #end_time
-    t_q_counter = [time_quantum] * pn
-
     gantt = [["" for j in range(sum(bt)+10)] for j in range(pn)]     #make empty gantt 2 dimensional list   
-
     power_used = 0
-    
+
+    tq_wait_queue = []                      #time_quantum ready_q
+    t_q_counter = [time_quantum] * pn       #calculate last time_quantum 
+
+
     for i in range(pn) :
         gantt[i][0] = gantt_default[i]  # 간트 차트 초기값 'P','E' 입력    
     
@@ -35,28 +35,31 @@ def rr(at, bt, pn,  gantt_default) :
                  # 프로세스 추출
                 process_num = line.index(processor_n)    
                 
-                if gantt[processor_n][0] == 'P' :
+                if gantt[processor_n][0] == 'P' :       #Processor == 'P'
                     bt[process_num] -= 2                # 실행 시간 -2 (P)
                     power_used += 3                     # 3W (P)
                     used_core += 1  # 전력 소비
                     t_q_counter[processor_n] -= 1
-                    if t_q_counter[processor_n] == 0 :
-                        line[process_num] = 'None'
-                        if bt[process_num] > 0 :
+
+                    if t_q_counter[processor_n] == 0 : #만약 time_qauntum 만큼 사용했다면
+                        line[process_num] = 'None'     #burst 남아있다는 기준 하에 tq_wait_queue에 넣고 다음 차례 시작
+                        if bt[process_num] > 0 :       
                             tq_wait_queue.append(process_num)
                         else :
                             end_time[process_num] = timer + 1
                         
                     elif bt[process_num] <= 0  :       # 만약 실행시간이 0이하 (P일 때 -1도 될수 있으니)
-                        line[process_num] = 'None'  # 라인큐에서 나가리      
+                        line[process_num] = 'None'     # 라인큐에서 제거       
                         end_time[process_num] = timer + 1
-                    t_q_counter[processor_n] = 2
+                    t_q_counter[processor_n] = 2        #time_qauntum 초기하 
 
-                else : 
+
+                else :                                  #Processor == 'E'
                     bt[process_num] -= 1                # 실행 시간 -1 (E)
                     power_used += 1                     # 1W (E)
                     used_core += 1  # 전력 소비
                     t_q_counter[processor_n] -= 1 
+                    
                     if t_q_counter[processor_n] == 0 :
                         line[process_num] = 'None'
                         if bt[process_num] > 0 :
