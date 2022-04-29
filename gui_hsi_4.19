@@ -1,5 +1,7 @@
 from tkinter import *
 import tkinter.ttk as ttk
+import team_operator
+import pprint
 
 root = Tk()
 root.title("Hansongyi")
@@ -62,7 +64,7 @@ def add_p_core():
     global core
     if p_core + e_core < 4:
         # PROCESSOR 프레임
-        core.append('p')
+        core.append('P')
         processor_frame = LabelFrame(processor_root_frame, height=3, width=950, bg=color[p_core + e_core + 4])
         processor_frame.pack(side="top", fill="both")
 
@@ -83,7 +85,7 @@ def add_e_core():
     global core
     if p_core + e_core < 4:
         # PROCESSOR 프레임
-        core.append('e')
+        core.append('E')
         processor_frame = LabelFrame(processor_root_frame, height=3, width=950, bg=color[p_core + e_core + 4])
         processor_frame.pack(side="top", fill="both")
 
@@ -104,7 +106,8 @@ def delete_core():
     global core
     if p_core + e_core > 0:
         processor_root_frame.pack_slaves().pop().destroy()
-        if core.pop == 'p':
+        c_delete = core.pop()
+        if c_delete == 'P':
             p_core -= 1
         else:
             e_core -= 1
@@ -211,6 +214,7 @@ def myfunction(event):
 # Canvas 생성
 canvas = Canvas(process_root_frame, bg="white", relief="flat", bd=0)
 process_canvas_frame = Frame(canvas)
+
 # 스크롤바 생성
 myscrollbar = Scrollbar(process_root_frame, orient="vertical", command=canvas.yview)
 canvas.configure(yscrollcommand=myscrollbar.set)
@@ -238,12 +242,12 @@ process_arrival_time = []
 process_burst_time = []
 
 # update
-def update_process():
+def update_process(turn_around_time, waiting_time, normalize_time):
     for i in range(process):
         process_frame = process_canvas_frame.pack_slaves().pop(i)
-        process_frame.grid_slaves().pop(2).configure(text="Waiting Updated")
-        process_frame.grid_slaves().pop(1).configure(text="Trunaround Updated")
-        process_frame.grid_slaves().pop(0).configure(text="Normalized Trunaround Updated")
+        process_frame.grid_slaves().pop(2).configure(text=waiting_time[i])
+        process_frame.grid_slaves().pop(1).configure(text=turn_around_time[i])
+        process_frame.grid_slaves().pop(0).configure(text=normalize_time[i])
 
 def update_processor():
     ia = 0
@@ -255,6 +259,7 @@ def run():
     global time_quantum
     global process_arrival_time
     global process_burst_time
+    global core
     scheduling_type = input_frame.grid_slaves().pop(9).get()
     time_quantum = int(input_frame.grid_slaves().pop(7).get(1.0, "end - 1c"))
     for i in range(process):
@@ -262,13 +267,22 @@ def run():
         process_arrival_time.append(int(process_frame.grid_slaves().pop(4).get(1.0, "end - 1c")))
         process_burst_time.append(int(process_frame.grid_slaves().pop(3).get(1.0, "end - 1c")))
 
-    update_process()
+    gantt_chart, power_used, turn_around_time, waiting_time, normalize_time = \
+        team_operator.operator(core, scheduling_type, time_quantum, process_arrival_time, process_burst_time, )
+
+    update_process(turn_around_time, waiting_time, normalize_time)
     update_processor()
 
-    print(scheduling_type)
-    print(time_quantum)
-    print(process_arrival_time)
-    print(process_burst_time)
+    # print(core)
+    # print(scheduling_type)
+    # print(time_quantum)
+    # print(process_arrival_time)
+    # print(process_burst_time)
+    print(*gantt_chart, sep='\n')
+    print(power_used)
+    print(turn_around_time)
+    print(waiting_time)
+    print(normalize_time)
 
 # RUN BUTTON
 btn_run = Button(input_frame, padx=5, pady=5, width=5, text="RUN", bg="#FFF9C4", relief="groove", overrelief="solid",
@@ -284,7 +298,6 @@ def clear_variables():
     time_quantum = 0
     process_arrival_time.clear()
     process_burst_time.clear()
-    core.clear()
 
 
 # CLEAR all
@@ -301,6 +314,8 @@ def clear():
     process = 0
     p_core = 0
     e_core = 0
+    core.clear()
+
 
 
 # CLEAR BUTTON
