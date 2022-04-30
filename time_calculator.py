@@ -1,13 +1,3 @@
-def waiting_time(tt, bt) :
-    
-    wt = [None] * len(bt) #out of range issue problem 
-    #wt = []
-    for i in range(0,len(bt)):
-        wt[i] = tt[i] - bt[i] 
-        if(wt[i]<0):
-            wt[i] = 0 
-    return wt
-
 def turnaround_time(at, et) : 
     tt = [None] * len(at)  #out of range issue problem 
     

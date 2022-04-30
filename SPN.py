@@ -13,6 +13,7 @@ def spn(at, bt, pn, gantt_default) :
     gantt = [["" for j in range(sum(bt)+10)] for j in range(pn)]     #make empty gantt 2 dimensional list   
     power_used = 0
     at_bt = []                  #SPN 추가 2차원 배열 (  [p1(at),p1(bt)] , 저장 ) 
+    wtime = [0] * len(at)#NEW
 
     
     for i in range(pn) :
@@ -87,6 +88,10 @@ def spn(at, bt, pn, gantt_default) :
         if max(bt) <= 0 :
             break
         
+
+        for i in ready_queue :#NEW
+            wtime[i] += 1#NEW
+            
         timer += 1
 
     ttime = time_calculator.turnaround_time(at,end_time)
