@@ -208,7 +208,7 @@ def delete_process():
 
 
 def myfunction(event):
-    canvas.configure(scrollregion=canvas.bbox("all"), width=950, bg="white")
+    canvas.configure(scrollregion=canvas.bbox("all"), bg="white")
 
 
 # Canvas 생성
