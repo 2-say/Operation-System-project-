@@ -212,16 +212,16 @@ def myfunction(event):
 
 
 # Canvas 생성
-canvas = Canvas(process_root_frame, bg="white", relief="flat", bd=0)
+canvas = Canvas(process_root_frame, bg="white", width=1020)
 process_canvas_frame = Frame(canvas)
 
 # 스크롤바 생성
-myscrollbar = Scrollbar(process_root_frame, orient="vertical", command=canvas.yview)
+myscrollbar = Scrollbar(process_root_frame, orient="vertical", command=canvas.yview, width = 20)
 canvas.configure(yscrollcommand=myscrollbar.set)
 
 myscrollbar.pack(side="right", fill="y")
 canvas.pack(side="left")
-canvas.create_window((0, 0), window=process_canvas_frame, anchor=NW)
+canvas.create_window((0, 0), window=process_canvas_frame, anchor=W, width = 1020)
 process_canvas_frame.bind("<Configure>", myfunction)
 
 # PROCESS ADD BUTTON
