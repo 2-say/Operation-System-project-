@@ -56,7 +56,6 @@ p_core = 0
 e_core = 0
 core = []
 
-
 # add p core
 def add_p_core():
     global p_core
@@ -65,18 +64,24 @@ def add_p_core():
     if p_core + e_core < 4:
         # PROCESSOR 프레임
         core.append('P')
-        processor_frame = LabelFrame(processor_root_frame, height=3, width=950, bg=color[p_core + e_core + 4])
+        processor_frame = LabelFrame(processor_root_frame, height=4, width=900, bg=color[p_core + e_core + 4])
         processor_frame.pack(side="top", fill="both")
 
         # CORE 명
-        CORE = Label(processor_frame, text="P CORE", width=10, bg=color[p_core + e_core + 4])
-        CORE.grid(column=1, row=0, padx=2, pady=4)
+        CORE = Label(processor_frame, text="P CORE",height=4, width=10, bg=color[p_core + e_core + 4])
+        CORE.grid(column=1, row=0, padx=2)
         p_core += 1
 
-        # text 입력
-        text = Text(processor_frame, height=3, padx=230)
-        text.grid(column=2, row=0, padx=10, pady=6)
-
+        # gantt_frame 생성
+        gantt_frame = Frame(processor_frame, height=40,width=800, bg="white")
+        gantt_frame.grid(column=2, row=0, padx=10)
+        
+        #progressbar 생성
+        progressbar = ttk.Progressbar(gantt_frame, maximum = 100, mode = "determinate", length=900)
+        progressbar.start(20)
+        progressbar.step(4)
+        progressbar.pack( fill="both")
+        
 
 # add e core
 def add_e_core():
@@ -86,18 +91,23 @@ def add_e_core():
     if p_core + e_core < 4:
         # PROCESSOR 프레임
         core.append('E')
-        processor_frame = LabelFrame(processor_root_frame, height=3, width=950, bg=color[p_core + e_core + 4])
+        processor_frame = LabelFrame(processor_root_frame, height=4, width=900, bg=color[p_core + e_core + 4])
         processor_frame.pack(side="top", fill="both")
 
         # CORE 명
-        CORE = Label(processor_frame, text="E CORE", width=10, bg=color[p_core + e_core + 4])
-        CORE.grid(column=1, row=0, padx=2, pady=4)
+        CORE = Label(processor_frame, text="E CORE",height=4, width=10, bg=color[p_core + e_core + 4])
+        CORE.grid(column=1, row=0, padx=2)
         e_core += 1
 
-        # text 입력
-        text = Text(processor_frame, height=3, padx=230)
-        text.grid(column=2, row=0, padx=10, pady=6)
-
+       # gantt_frame 생성
+        gantt_frame = Frame(processor_frame,height=40, width=800, bg="white")
+        gantt_frame.grid(column=2, row=0, padx=10)
+        
+        #progressbar 생성
+        progressbar = ttk.Progressbar(gantt_frame, maximum = 100, mode = "indeterminate", length=900)
+        progressbar.start(20)
+        progressbar.pack( fill="both")
+        
 
 # delete core
 def delete_core():
