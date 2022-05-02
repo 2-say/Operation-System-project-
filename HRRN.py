@@ -27,7 +27,6 @@ def hrrn(at, bt, pn, gantt_default) :
         if timer in at :        # Arrival_Time -> Ready_Queue
             at_rr.append([at.index(timer),bt[at.index(timer)]]) #해당하는 ArriveTime process 저장 
             ready_queue.append(at.index(timer))  #ready에 정렬된 값을 넣는다.
- 
         for processor_n in range(pn) :  # Processor(Core) -> 0부터 시작
             
             
@@ -43,13 +42,13 @@ def hrrn(at, bt, pn, gantt_default) :
                     if bt[process_num] <= 0 :       # 만약 실행시간이 0이하 (P일 때 -1도 될수 있으니)
                         line[process_num] = 'None'  # 라인큐에서 나가리
                         end_time[process_num] = timer + 1
-                    ready_queue = []                                    #ready 정렬해서 다시 받기 위해서 초기화 
-                    for x, y in at_rr :
-                        response_ratio[x] = (wtime[x] + bt[x]) / bt[x]
-                        y = response_ratio[x]
-                    for i in at_rr :
-                        ready_queue.append(i[0])
-                    at_rr.sort(key=lambda x: (x[1], x[0]))              #burst 적은 값으로 정렬한 후 (오름차순) 
+                        ready_queue = []                                    #ready 정렬해서 다시 받기 위해서 초기화 
+                        for x, y in at_rr :
+                            response_ratio[x] = (wtime[x] + bt[x]) / bt[x]
+                            y = response_ratio[x]
+                        for i in at_rr :
+                            ready_queue.append(i[0])
+                        at_rr.sort(key=lambda x: (x[1], x[0]))              #burst 적은 값으로 정렬한 후 (오름차순) 
 
                 
                 else : 
@@ -59,21 +58,24 @@ def hrrn(at, bt, pn, gantt_default) :
                     if bt[process_num] <= 0 :       # 만약 실행시간이 0이하 (P일 때 -1도 될수 있으니)
                         line[process_num] = 'None'  # 라인큐에서 나가리
                         end_time[process_num] = timer + 1
-                    ready_queue = []                                    #ready 정렬해서 다시 받기 위해서 초기화 
-                    for x, y in at_rr :
-                        response_ratio[x] = (wtime[x] + bt[x]) / bt[x]
-                        y = response_ratio[x]
-                    for i in at_rr :
-                        ready_queue.append(i[0])
-                    at_rr.sort(key=lambda x: (x[1], x[0]))              #burst 적은 값으로 정렬한 후 (오름차순) 
+                        ready_queue = []                                    #ready 정렬해서 다시 받기 위해서 초기화 
+                        for x, y in at_rr :
+                        
+                            response_ratio[x] = (wtime[x] + bt[x]) / bt[x]
+                            y = response_ratio[x]
+                            print ("y", y)
+                        for i in at_rr :
+                            ready_queue.append(i[0])
+                        at_rr.sort(key=lambda x: (x[1], x[0]))              #burst 적은 값으로 정렬한 후 (오름차순) 
                 
                 gantt[processor_n][timer+1] = col_gantt.colors(process_num)   # 간트에 집어 넣음
                 
                 
             elif len(ready_queue) != 0 :        # 레디큐가 안비워져 있으면 && line에 잡히는 것이 없다면
                 process_num = ready_queue.pop(0) # 첫번째 값을 꺼내고 삭제한다.
+
                 at_rr.pop(0)                     # ready Q와 같은 상태를 맞춰주기 위해 똑같이 삭제
-                
+
                 if gantt[processor_n][0] == 'P' :
                     bt[process_num] -= 2                # 실행 시간 -2 (P)
                     power_used += 3                     # 3W (P)
@@ -103,7 +105,6 @@ def hrrn(at, bt, pn, gantt_default) :
 
         for i in ready_queue :#NEW
             wtime[i] += 1 #NEW  
-            print(i, "번 Process : ", wtime[i])
             
         timer += 1
 
