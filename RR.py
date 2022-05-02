@@ -52,7 +52,7 @@ def rr(at, bt, pn, time_quantum, gantt_default):
                     elif bt[process_num] <= 0:  # 만약 실행시간이 0이하 (P일 때 -1도 될수 있으니)
                         line[process_num] = 'None'  # 라인큐에서 제거
                         end_time[process_num] = timer + 1
-                    t_q_counter[processor_n] = 2  # time_qauntum 초기하
+                    t_q_counter[processor_n] = time_quantum  # time_qauntum 초기하
 
 
                 else:  # Processor == 'E'
@@ -67,7 +67,7 @@ def rr(at, bt, pn, time_quantum, gantt_default):
                             ready_queue.append(process_num)
                         else:
                             end_time[process_num] = timer + 1
-                        t_q_counter[processor_n] = 2
+                        t_q_counter[processor_n] = time_quantum
                     elif bt[process_num] <= 0:  # 만약 실행시간이 0이하 (P일 때 -1도 될수 있으니)
                         line[process_num] = 'None'  # 라인큐에서 나가리
                         end_time[process_num] = timer + 1
