@@ -1,7 +1,12 @@
 from tkinter import *
 import tkinter.ttk as ttk
 import team_operator
+import time
 import pprint
+
+color_dic = {"white" : 15, "p1_color" : 0, "p2_color" : 1, "p3_color" : 2, "p4_color" : 3,
+                 "p5_color" : 4, "p6_color" : 5, "p7_color" : 6, "p8_color" : 7, "p9_color" : 8, "p10_color" : 9,
+                 "p11_color" : 10, "p13_color" : 11, "p11_color" : 12, "p11_color" : 13, "p11_color" : 14}
 
 root = Tk()
 root.title("Hansongyi")
@@ -56,6 +61,7 @@ p_core = 0
 e_core = 0
 core = []
 
+
 # add p core
 def add_p_core():
     global p_core
@@ -64,24 +70,24 @@ def add_p_core():
     if p_core + e_core < 4:
         # PROCESSOR 프레임
         core.append('P')
-        processor_frame = LabelFrame(canvas, height=4, width=900, bg=color[p_core + e_core + 4])
+        processor_frame = LabelFrame(processor_root_frame, height=4, width=900, bg=color[p_core + e_core + 4])
         processor_frame.pack(side="top", fill="both")
 
         # CORE 명
-        CORE = Label(processor_frame, text="P CORE",height=4, width=10, bg=color[p_core + e_core + 4])
+        CORE = Label(processor_frame, text="P CORE", height = 4, width=10, bg=color[p_core + e_core + 4])
         CORE.grid(column=1, row=0, padx=2)
-        p_core += 1
 
         # gantt_frame 생성
-        gantt_frame = Frame(processor_frame, height=40,width=800, bg="white")
+        gantt_frame = Frame(processor_frame, height=40,width=800, bg=color[p_core + e_core + 4])
         gantt_frame.grid(column=2, row=0, padx=10)
-        
+
+        p_core += 1
+
         #progressbar 생성
-        progressbar = ttk.Progressbar(gantt_frame, maximum = 100, mode = "determinate", length=900)
-        progressbar.start(20)
-        progressbar.step(4)
-        progressbar.pack( fill="both")
-        
+        # progressbar = ttk.Progressbar(gantt_frame, maximum = 100, mode = "determinate", length=900)
+        # progressbar.start(20)
+        # progressbar.step(4)
+        # progressbar.pack( fill="both")
 
 # add e core
 def add_e_core():
@@ -91,23 +97,23 @@ def add_e_core():
     if p_core + e_core < 4:
         # PROCESSOR 프레임
         core.append('E')
-        processor_frame = LabelFrame(canvas, height=4, width=900, bg=color[p_core + e_core + 4])
+        processor_frame = LabelFrame(processor_root_frame, height=3, width=950, bg=color[p_core + e_core + 4])
         processor_frame.pack(side="top", fill="both")
 
         # CORE 명
-        CORE = Label(processor_frame, text="E CORE",height=4, width=10, bg=color[p_core + e_core + 4])
+        CORE = Label(processor_frame, text="E CORE", height = 4, width=10, bg=color[p_core + e_core + 4])
         CORE.grid(column=1, row=0, padx=2)
+
+        # gantt_frame 생성
+        gantt_frame = Frame(processor_frame,height=40, width=800, bg=color[p_core + e_core + 4])
+        gantt_frame.grid(column=2, row=0, padx=10)
+
         e_core += 1
 
-       # gantt_frame 생성
-        gantt_frame = Frame(processor_frame,height=40, width=800, bg="white")
-        gantt_frame.grid(column=2, row=0, padx=10)
-        
         #progressbar 생성
-        progressbar = ttk.Progressbar(gantt_frame, maximum = 100, mode = "indeterminate", length=900)
-        progressbar.start(20)
-        progressbar.pack( fill="both")
-        
+        # progressbar = ttk.Progressbar(gantt_frame, maximum = 100, mode = "indeterminate", length=900)
+        # progressbar.start(20)
+        # progressbar.pack( fill="both")
 
 # delete core
 def delete_core():
@@ -170,8 +176,7 @@ arrival_time = []
 burst_time = []
 color = ['snow', 'ghost white', 'white smoke', 'gainsboro', 'floral white', 'old lace',
          'linen', 'antique white', 'papaya whip', 'blanched almond', 'bisque', 'peach puff',
-         'navajo white', 'lemon chiffon', 'mint cream']
-
+         'navajo white', 'lemon chiffon', 'mint cream', "black"]
 
 # add process
 def add_process():
@@ -223,7 +228,7 @@ def myfunction(event):
 
 # Canvas 생성
 canvas = Canvas(process_root_frame, bg="white", width=1020)
-process_canvas_frame = Frame(canvas, bg="white")
+process_canvas_frame = Frame(canvas)
 
 # 스크롤바 생성
 myscrollbar = Scrollbar(process_root_frame, orient="vertical", command=canvas.yview, width = 20)
@@ -231,7 +236,7 @@ canvas.configure(yscrollcommand=myscrollbar.set)
 
 myscrollbar.pack(side="right", fill="y")
 canvas.pack(side="left")
-canvas.create_window((0, 0), window=process_canvas_frame, anchor=W, width = 1020)
+canvas.create_window((0, 0), window=process_canvas_frame, anchor=NW, width = 1020)
 process_canvas_frame.bind("<Configure>", myfunction)
 
 # PROCESS ADD BUTTON
@@ -259,8 +264,19 @@ def update_process(turn_around_time, waiting_time, normalize_time):
         process_frame.grid_slaves().pop(1).configure(text=turn_around_time[i])
         process_frame.grid_slaves().pop(0).configure(text=normalize_time[i])
 
-def update_processor():
-    ia = 0
+def update_label(gantt_chart, i):
+    for j in range(len(gantt_chart)):
+        processor_frame = processor_root_frame.pack_slaves().pop(j)
+        chart = processor_frame.grid_slaves().pop(0)
+        # box = Label(chart, text = color_dic[gantt_chart[j][i]], width = 1, bg = color[color_dic[gantt_chart[j][i]]], font = "맑은고딕 9 bold")
+        # box.grid(column=i, row=0, padx=3, pady=3)
+
+
+def update_processor(gantt_chart):
+    for i in range(1, len(gantt_chart[0])):
+        time.sleep(0.1)
+        update_label(gantt_chart, i)
+        root.update()
 
 # run
 def run():
@@ -270,8 +286,10 @@ def run():
     global process_arrival_time
     global process_burst_time
     global core
+
     scheduling_type = input_frame.grid_slaves().pop(9).get()
     time_quantum = int(input_frame.grid_slaves().pop(7).get(1.0, "end - 1c"))
+
     for i in range(process):
         process_frame = process_canvas_frame.pack_slaves().pop(i)
         process_arrival_time.append(int(process_frame.grid_slaves().pop(4).get(1.0, "end - 1c")))
@@ -281,7 +299,7 @@ def run():
         team_operator.operator(core, scheduling_type, time_quantum, process_arrival_time, process_burst_time, )
 
     update_process(turn_around_time, waiting_time, normalize_time)
-    update_processor()
+    update_processor(gantt_chart)
 
     # print(core)
     # print(scheduling_type)
@@ -325,23 +343,6 @@ def clear():
     p_core = 0
     e_core = 0
     core.clear()
-
-def myfunction2(event):
-    canvas.configure(scrollregion=canvas.bbox("all"), bg="white")
-
-
-# Canvas 생성
-canvas = Canvas(processor_root_frame, bg="white", width=1020)
-processor_canvas_frame = Frame(canvas)
-
-# 스크롤바 생성
-myscrollbar = Scrollbar(processor_root_frame, orient="horizontal", command=canvas.yview, width = 20)
-canvas.configure(yscrollcommand=myscrollbar.set)
-
-myscrollbar.pack(side="bottom", fill="both")
-canvas.pack(side="top")
-canvas.create_window((0, 0), window=processor_canvas_frame, anchor=W, width = 1020)
-processor_canvas_frame.bind("<Configure>", myfunction2)
 
 # CLEAR BUTTON
 btn_run = Button(input_frame, padx=5, pady=5, width=5, text="CLEAR", bg="#FFCCBC", bd=0, activebackground="#FFCCBC")
