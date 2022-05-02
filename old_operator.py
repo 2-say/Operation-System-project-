@@ -4,6 +4,8 @@ import pprint
 import RR
 import SRTN
 import SPN 
+import HRRN
+import WTT
 from time_calculator import turnaround_time  #이쁘게 출력하기 위한 (필요 없음)
 
 
@@ -46,6 +48,15 @@ def main():
 
         #SRTN input and output 
         #gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = SRTN.srtn(at, bt, processor_number, gt)
+
+        #HRRN
+        gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = HRRN.hrrn(at, bt, processor_number, gt)
+
+
+        #new WTT
+        #gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = WTT.wtt(at, bt, processor_number,3, gt)
+
+
 
         print("------------------------------------------------")
         print(*gantt_chart, sep='\n')  #gantt print \n 
