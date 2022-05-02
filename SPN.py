@@ -95,8 +95,13 @@ def spn(at, bt, pn, gantt_default) :
         timer += 1
 
     ttime = time_calculator.turnaround_time(at,end_time)
-    wtime = time_calculator.waiting_time(ttime, bt_copy)
     ntime = time_calculator.normalized_tt(ttime, bt_copy)
 
+
+    # remvoe '' element
+
+    for i in range(len(gantt)):            # 세로 크기
+        for j in range(len(gantt[i])):     # 가로 크기
+            gantt[i] = ' '.join(gantt[i]).split() 
 
     return gantt, power_used,ttime,wtime,ntime

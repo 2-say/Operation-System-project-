@@ -12,7 +12,7 @@ def fcfs(at, bt, pn, gantt_default):
 
     wtime = [0] * len(at)#NEW
 
-    gantt = [["" for j in range(min(at))] for j in range(pn)]  # make empty gantt 2 dimensional list
+    gantt = [["" for j in range(sum(bt)+10)] for j in range(pn)]  # make empty gantt 2 dimensional list
 
     power_used = 0
 
@@ -30,7 +30,7 @@ def fcfs(at, bt, pn, gantt_default):
 
                 # 프로세스 추출
                 process_num = line.index(processor_n)
-
+    
                 if gantt[processor_n][0] == 'P':
                     bt[process_num] -= 2  # 실행 시간 -2 (P)
                     power_used += 3  # 3W (P)
@@ -77,14 +77,33 @@ def fcfs(at, bt, pn, gantt_default):
 
         if max(bt) <= 0:
             break
+        
 
         for i in ready_queue :#NEW
-            wtime[i] += 1#NEW
+            wtime[i] += 1 #NEW
 
 
         timer += 1
 
     ttime = time_calculator.turnaround_time(at, end_time)
     ntime = time_calculator.normalized_tt(ttime, bt_copy)
+
+    
+
+    # remvoe '' element
+
+    for i in range(len(gantt)):            # 세로 크기
+        for j in range(len(gantt[i])):     # 가로 크기
+            gantt[i] = ' '.join(gantt[i]).split() 
+    
+    
+    
+    
+    
+
+    
+    
+    
+    print(gantt)
 
     return gantt, power_used, ttime, wtime, ntime
