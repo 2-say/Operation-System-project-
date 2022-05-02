@@ -50,7 +50,7 @@ def main():
         #gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = SRTN.srtn(at, bt, processor_number, gt)
 
         #HRRN
-        gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = HRRN.hrrn(at, bt, processor_number, gt)
+        #gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = HRRN.hrrn(at, bt, processor_number, gt)
 
 
         #new WTT
