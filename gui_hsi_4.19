@@ -64,7 +64,7 @@ def add_p_core():
     if p_core + e_core < 4:
         # PROCESSOR 프레임
         core.append('P')
-        processor_frame = LabelFrame(processor_root_frame, height=4, width=900, bg=color[p_core + e_core + 4])
+        processor_frame = LabelFrame(canvas, height=4, width=900, bg=color[p_core + e_core + 4])
         processor_frame.pack(side="top", fill="both")
 
         # CORE 명
@@ -91,7 +91,7 @@ def add_e_core():
     if p_core + e_core < 4:
         # PROCESSOR 프레임
         core.append('E')
-        processor_frame = LabelFrame(processor_root_frame, height=4, width=900, bg=color[p_core + e_core + 4])
+        processor_frame = LabelFrame(canvas, height=4, width=900, bg=color[p_core + e_core + 4])
         processor_frame.pack(side="top", fill="both")
 
         # CORE 명
