@@ -31,9 +31,10 @@ def hrrn(at, bt, pn, gantt_default) :
             
         if check == True :
             ready_queue = []                                    #ready 정렬해서 다시 받기 위해서 초기화 
-            for x, y in at_rr :
-                response_ratio[x] = (wtime[x] + bt[x]) / bt[x]
-                y = response_ratio[x]
+            
+            for x in at_rr :
+                response_ratio[x[0]] = (wtime[x[0]] + bt[x[0]]) / bt[x[0]]
+                x[1] = response_ratio[x[0]]
             at_rr.sort(key=lambda x: (x[1], x[0]), reverse=True)              #burst 적은 값으로 정렬한 후 (오름차순) 
             for i in at_rr :
                 ready_queue.append(i[0])

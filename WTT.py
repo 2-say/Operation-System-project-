@@ -42,7 +42,7 @@ def wtt(at, bt, pn, time_quantum, gantt_default):
                         end_time[process_num] = timer + 1
                         ready_queue_wtime[process_num] = 0
                         if max(ready_queue_wtime) >= waiting_tq :
-                            ready_queue.insert(0,ready_queue.index(at.index(max(ready_queue_wtime))))
+                            ready_queue.insert(0,ready_queue.pop(ready_queue.index(ready_queue_wtime.index(max(ready_queue_wtime)))))
 
                 else:
                     bt[process_num] -= 1  # 실행 시간 -1 (E)
@@ -53,7 +53,7 @@ def wtt(at, bt, pn, time_quantum, gantt_default):
                         end_time[process_num] = timer + 1
                         ready_queue_wtime[process_num] = 0
                         if max(ready_queue_wtime) >= waiting_tq :
-                            ready_queue.insert(0,ready_queue.index(at.index(max(ready_queue_wtime))))
+                            ready_queue.insert(0,ready_queue.pop(ready_queue.index(ready_queue_wtime.index(max(ready_queue_wtime)))))
 
                 gantt[processor_n][timer + 1] = col_gantt.colors(process_num)  # 간트에 집어 넣음
 

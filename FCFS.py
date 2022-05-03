@@ -97,13 +97,6 @@ def fcfs(at, bt, pn, gantt_default):
             gantt[i] = ' '.join(gantt[i]).split() 
     
     
-    
-    
-    
 
-    
-    
-    
-    print(gantt)
 
     return gantt, power_used, ttime, wtime, ntime

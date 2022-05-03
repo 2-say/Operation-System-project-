@@ -2,7 +2,7 @@ def turnaround_time(at, et) :
     tt = [None] * len(at)  #out of range issue problem 
     
     for i in range(0,len(at)):
-        tt[i] = et[i] - at[i] 
+        tt[i] = et[i] - at[i]  
     return tt
 
 def normalized_tt(tt, bt) :
