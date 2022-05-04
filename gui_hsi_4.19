@@ -67,11 +67,11 @@ def add_p_core():
     if p_core + e_core < 4:
         # PROCESSOR 프레임
         core.append('P')
-        processor_frame = LabelFrame(processor_canvas_frame, height=4, width=900, bg="#ECEFF1", relief="flat")
+        processor_frame = LabelFrame(processor_canvas_frame, height=3, width=900, bg="#ECEFF1", relief="flat")
         processor_frame.pack(side="top", fill="both")
 
         # CORE 명
-        CORE = Label(processor_frame, text="P CORE", height = 4, width=10, bg="#ECEFF1")
+        CORE = Label(processor_frame, text="P CORE", height = 3, width=10, bg="#ECEFF1")
         CORE.config(font="맑은고딕 8 bold")
         CORE.grid(column=1, row=0, padx=2)
 
@@ -89,11 +89,11 @@ def add_e_core():
     if p_core + e_core < 4:
         # PROCESSOR 프레임
         core.append('E')
-        processor_frame = LabelFrame(processor_canvas_frame, height=3, width=950, bg= "#ECEFF1",  relief="flat")
+        processor_frame = LabelFrame(processor_canvas_frame, bg= "#ECEFF1",  relief="flat")
         processor_frame.pack(side="top", fill="both")
 
         # CORE 명
-        CORE = Label(processor_frame, text="E CORE", height = 4, width=10, bg="#ECEFF1")
+        CORE = Label(processor_frame, text="E CORE", height = 2, width=10, bg="#ECEFF1")
         CORE.config(font="맑은고딕 8 bold")
         CORE.grid(column=1, row=0, padx=2)
 
@@ -109,11 +109,16 @@ def delete_core():
     global core
     if p_core + e_core > 0:
         processor_canvas_frame.pack_slaves().pop().destroy()
+        # process_canvas_frame.pack_slaves().pop().destroy()
         c_delete = core.pop()
         if c_delete == 'P':
             p_core -= 1
         else:
             e_core -= 1
+
+    elif p_core + e_core == 0:
+        for k in processor_canvas_frame.pack_slaves().pop(0).grid_slaves().pop(0).grid_slaves():
+            k.destroy()
 
 def myfunction2(event):
     canvas2.configure(scrollregion=canvas2.bbox("all"), bg="#ECEFF1")
@@ -130,6 +135,17 @@ myscrollbar2.pack(side="bottom", fill="x")
 canvas2.pack(side="top")
 canvas2.create_window((0, 0), window=processor_canvas_frame, anchor=NW, height=500)
 processor_canvas_frame.bind("<Configure>", myfunction2)
+
+# time_root_frame
+time_root_frame = LabelFrame(processor_canvas_frame, height=3, width=900, bg="#ECEFF1", relief="flat")
+time_root_frame.pack(side="top", fill="both")
+
+sequence = Label(time_root_frame, text="Time", height=2, width=10, bg="#ECEFF1")
+sequence.config(font="맑은고딕 8 bold")
+sequence.grid(column=1, row=0, padx=2)
+
+time_frame = Frame(time_root_frame,height=40, width=900, bg="#ECEFF1")
+time_frame.grid(column=2, row=0, padx=10)
 
 # P CORE ADD BUTTON
 btn_processorP_add = Button(input_frame, padx=5, pady=5, width=10, text="ADD P CORE", bg="#C5CAE9", relief="groove",
@@ -183,7 +199,7 @@ def add_process():
     global color
     if process < 15:
         # PROCESS 프레임
-        process_frame = LabelFrame(process_canvas_frame, bg = "#ECEFF1",  relief="flat")
+        process_frame = LabelFrame(process_canvas_frame, bg = "#ECEFF1", relief="flat")
         process_frame.pack(side="top", fill="both")
 
         # PROCESS 이름
@@ -270,25 +286,35 @@ def update_process(turn_around_time, waiting_time, normalize_time):
 
 color = ['#FFCDD2', '#F8BBD0', '#D1C4E9', '#C5CAE9', 'old lace', 'floral white',
          'linen', 'antique white', 'papaya whip', 'blanched almond', 'bisque', 'peach puff',
-         'navajo white', 'lemon chiffon', 'mint cream', "black", "white"]
+         'navajo white', 'lemon chiffon', 'mint cream', "white"]
 
-color_dic = {"" : 16, "White" : 15, "p1_color" : 0, "p2_color" : 1, "p3_color" : 2, "p4_color" : 3,
+color_dic = {"White" : 15, "p1_color" : 0, "p2_color" : 1, "p3_color" : 2, "p4_color" : 3,
                  "p5_color" : 4, "p6_color" : 5, "p7_color" : 6, "p8_color" : 7, "p9_color" : 8, "p10_color" : 9,
                  "p11_color" : 10, "p13_color" : 11, "p11_color" : 12, "p11_color" : 13, "p11_color" : 14}
 
 def update_label(gantt_chart, i):
     for j in range(len(gantt_chart)):
-        processor_frame = processor_canvas_frame.pack_slaves().pop(j)
+        processor_frame = processor_canvas_frame.pack_slaves().pop(j+1)
         chart = processor_frame.grid_slaves().pop(0)
-        box = Label(chart, text = "P"+str(color_dic[gantt_chart[j][i]]+ 1), height = 2, width = 3, bg = color[int(color_dic[gantt_chart[j][i]])], font = "맑은고딕 11 bold")
+        if color_dic[gantt_chart[j][i]] + 1 < 16:
+            box = Label(chart, text = "P"+str(color_dic[gantt_chart[j][i]]+1), height = 2, width = 4, bg = color[int(color_dic[gantt_chart[j][i]])], font = "맑은고딕 11 bold")
+        else:
+            box = Label(chart, height = 2, width = 4, bg = color[int(color_dic[gantt_chart[j][i]])], font = "맑은고딕 11 bold")
         box.grid(column=i, row=0, padx=3, pady=3)
 
+def update_time(n):
+    for i in range(n-1):
+        processor_frame = processor_canvas_frame.pack_slaves().pop(0)
+        seq = processor_frame.grid_slaves().pop(0)
+        box = Label(seq, text = str(i+1), height=2, width=4, font="맑은고딕 11 bold")
+        box.grid(column=i+1, row=0, padx=3, pady=3)
 
 def update_processor(gantt_chart):
+    update_time(len(gantt_chart[0]))
     for i in range(1, len(gantt_chart[0])):
-        time.sleep(0.2)
         update_label(gantt_chart, i)
         root.update()
+        time.sleep(0.2)
 
 # run
 def run():
@@ -342,16 +368,18 @@ def clear():
     global process
     global p_core
     global e_core
-    global core
     clear_variables()
-    for frame in process_canvas_frame.pack_slaves():
-        frame.destroy()
-    for frame in processor_canvas_frame.pack_slaves():
-        frame.destroy()
-    process = 0
-    p_core = 0
-    e_core = 0
-    core.clear()
+    # for frame in process_canvas_frame.pack_slaves():
+    #     frame.destroy()
+    # for frame in processor_canvas_frame.pack_slaves():
+    #     frame.destroy()
+    num = process
+    for i in range(num):
+        delete_process()
+    num = p_core + e_core
+    for i in range(num):
+        delete_core()
+    delete_core()
 
 # CLEAR BUTTON
 btn_run = Button(input_frame, padx=5, pady=5, width=5, text="CLEAR", bg="#FFCCBC", bd=0, activebackground="#FFCCBC")
