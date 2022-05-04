@@ -7,20 +7,20 @@ import pprint
 
 root = Tk()
 root.title("Hansongyi")
-root.geometry("1040x820")
+root.geometry("1040x770")
 root.option_add("*Font", "맑은고딕 9")
 root.resizable(False, False)
 root.configure(bg="#FFFFFF")
 
 # lab_team_project
 lab_team_project = Label(root, bg="#FFFFFF")
-lab_team_project.config(text="운영체제 3조 이세희 이도형 조경우 한송이", font="맑은고딕 10")
+lab_team_project.config(text="운영체제 3e조 이세희 이도형 조경우 한송이", font="맑은고딕 10")
 lab_team_project.pack(side="top", anchor="sw")
 
 # lab_topic
 lab_topic = Label(root, bg="#FFFFFF")
 lab_topic.config(text="Scheduling setting", font="맑은고딕 20 bold")
-lab_topic.pack(pady=50)
+lab_topic.pack(pady=20)
 
 # INPUT 프레임
 input_frame = Frame(root, bg="#FFFFFF")
@@ -123,12 +123,12 @@ canvas2 = Canvas(processor_root_frame, bg="#ECEFF1", width = 10000, bd =2)
 processor_canvas_frame = Frame(canvas2, bg="#ECEFF1")
 
 # 가로 스크롤바 생성
-myscrollbar2 = Scrollbar(processor_root_frame, orient="horizontal", command=canvas2.xview)
+myscrollbar2 = Scrollbar(processor_root_frame, orient="horizontal", command=canvas2.xview, width = 20)
 canvas2.configure(xscrollcommand=myscrollbar2.set)
 
 myscrollbar2.pack(side="bottom", fill="x")
 canvas2.pack(side="top")
-canvas2.create_window((0, 0), window=processor_canvas_frame, anchor=NW, width = 10000)
+canvas2.create_window((0, 0), window=processor_canvas_frame, anchor=NW, height=500)
 processor_canvas_frame.bind("<Configure>", myfunction2)
 
 # P CORE ADD BUTTON
