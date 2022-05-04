@@ -39,9 +39,8 @@ def main():
         #FCFS input and output 
         #gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = FCFS.fcfs(at, bt, processor_number, gt)
 
-
         #Round Robin input and output
-        #gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = RR.rr(at, bt, processor_number,3, gt)
+        #gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = RR.rr(at, bt, processor_number,2, gt)
 
         #SPN
         #gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = SPN.spn(at, bt, processor_number, gt)
@@ -54,7 +53,7 @@ def main():
 
 
         #new WTT
-        gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = WTT.wtt(at, bt, processor_number,3, gt)
+        gantt_chart, power_used,turn_around_time,waiting_time,normalize_time = WTT.wtt(at, bt, processor_number,6, gt)
 
 
 

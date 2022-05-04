@@ -23,7 +23,7 @@ def fcfs(at, bt, pn, gantt_default):
         used_core = 0  # 전력이 소비된 프로세서
         if timer in at:  # Arrival_Time -> Ready_Queue
             ready_queue.append(at.index(timer))
-
+        
         for processor_n in range(pn):  # Processor(Core) -> 0부터 시작
             gantt[processor_n].append('')
             if processor_n in line:  # 만약 라인 리스트에 n번째 프로세서가 잡히면

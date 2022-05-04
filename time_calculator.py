@@ -13,3 +13,7 @@ def normalized_tt(tt, bt) :
             ntt[i] = tt[i]/bt[i]
         else: ntt[i] = 0  
     return ntt
+
+
+
+    
