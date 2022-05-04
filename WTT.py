@@ -10,12 +10,11 @@ def wtt(at, bt, pn, time_quantum, gantt_default):
     timer = 0  # 타이머
     end_time = [None] * len(at)  # end_time
     waiting_tq = time_quantum
-
+    at_bt = []
+    check = False
     wtime = [0] * len(at)
     ready_queue_wtime = [0] * len(at)
-
     gantt = [["" for j in range(sum(bt)+10)] for j in range(pn)]  # make empty gantt 2 dimensional list
-
     power_used = 0
 
     for i in range(pn):
@@ -23,8 +22,17 @@ def wtt(at, bt, pn, time_quantum, gantt_default):
 
     while True:  # 무한 반복
         used_core = 0  # 전력이 소비된 프로세서
-        if timer in at:  # Arrival_Time -> Ready_Queue
-            ready_queue.append(at.index(timer))
+        if timer in at :        # Arrival_Time -> Ready_Queue
+            
+            ready_queue = []                                    #ready 정렬해서 다시 받기 위해서 초기화 
+            at_bt.append([at.index(timer),bt[at.index(timer)]]) #해당하는 ArriveTime process 저장 
+            at_bt.sort(key=lambda x: (x[1], x[0]))              #burst 적은 값으로 정렬한 후 (오름차순) 
+            for i in at_bt:
+                ready_queue.append(i[0])  #ready에 정렬된 값을 넣는다.
+                
+        if check == True and max(ready_queue_wtime) >= waiting_tq :
+            ready_queue.insert(0,ready_queue.pop(ready_queue.index(ready_queue_wtime.index(max(ready_queue_wtime)))))
+            check = False
 
         for processor_n in range(pn):  # Processor(Core) -> 0부터 시작
             gantt[processor_n].append('')
@@ -41,9 +49,8 @@ def wtt(at, bt, pn, time_quantum, gantt_default):
                         line[process_num] = 'None'  # 라인큐에서 나가리
                         end_time[process_num] = timer + 1
                         ready_queue_wtime[process_num] = 0
-                        if max(ready_queue_wtime) >= waiting_tq :
-                            ready_queue.insert(0,ready_queue.pop(ready_queue.index(ready_queue_wtime.index(max(ready_queue_wtime)))))
-
+                        check = True
+                    
                 else:
                     bt[process_num] -= 1  # 실행 시간 -1 (E)
                     power_used += 1  # 1W (E)
@@ -52,14 +59,14 @@ def wtt(at, bt, pn, time_quantum, gantt_default):
                         line[process_num] = 'None'  # 라인큐에서 나가리
                         end_time[process_num] = timer + 1
                         ready_queue_wtime[process_num] = 0
-                        if max(ready_queue_wtime) >= waiting_tq :
-                            ready_queue.insert(0,ready_queue.pop(ready_queue.index(ready_queue_wtime.index(max(ready_queue_wtime)))))
-
+                        check = True
+                        
                 gantt[processor_n][timer + 1] = col_gantt.colors(process_num)  # 간트에 집어 넣음
 
 
             elif len(ready_queue) != 0:  # 레디큐가 안비워져 있으면 && line에 잡히는 것이 없다면
                 process_num = ready_queue.pop(0)  # 첫번째 값을 꺼내고 삭제한다.
+                at_bt.pop(at_bt.index(process_num))
 
                 if gantt[processor_n][0] == 'P':
                     bt[process_num] -= 2  # 실행 시간 -2 (P)
