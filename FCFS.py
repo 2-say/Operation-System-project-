@@ -1,3 +1,6 @@
+#최근 수정일 : 5월 6일 오후 4:02 이세희 
+#중복 arrive time추가 
+
 import col_gantt
 import time_calculator
 import copy
@@ -5,7 +8,8 @@ import copy
 
 def fcfs(at, bt, pn, gantt_default):
     #############초기 변수 선언 부분  ##############
-    bt_copy = copy.deepcopy(bt) 
+    bt_copy = copy.deepcopy(bt)
+
     ready_queue = []  # 레디 큐
     line = [None] * len(at)  # 라인 리스트 (연속적인 입력을 위한 기억 리스트)
     timer = 0  # 타이머
@@ -13,6 +17,7 @@ def fcfs(at, bt, pn, gantt_default):
     wtime = [0] * len(at) 
     gantt = [["" for j in range(sum(bt)+10)] for j in range(pn)]  # make empty gantt 2 dimensional list
     power_used = 0
+    ready_Q = [[]]
 
 
     for i in range(pn):
@@ -22,11 +27,11 @@ def fcfs(at, bt, pn, gantt_default):
         used_core = 0  # 전력이 소비된 프로세서
         if timer in at:  # Arrival_Time -> Ready_Queue
 
-            
             rest_list = list(filter(lambda x: at[x] == timer, range(len(at))))
             
             for i in range(len(rest_list)):
                 ready_queue.append(rest_list[i])
+            
             
 
 
@@ -82,6 +87,13 @@ def fcfs(at, bt, pn, gantt_default):
 
             power_used += (0.1 * (pn - used_core))  # 대기 전력
 
+
+        #print("Time =",timer+1,"ready Q:", ready_queue)
+        ready_Q.append(copy.deepcopy(ready_queue))
+        
+
+        timer += 1
+
         if max(bt) <= 0:
             break
         
@@ -90,7 +102,7 @@ def fcfs(at, bt, pn, gantt_default):
             wtime[i] += 1 #NEW
 
 
-        timer += 1
+        
 
     ttime = time_calculator.turnaround_time(at, end_time)
     ntime = time_calculator.normalized_tt(ttime, bt_copy)
@@ -103,7 +115,7 @@ def fcfs(at, bt, pn, gantt_default):
         for j in range(len(gantt[i])):     # 가로 크기
             gantt[i] = ' '.join(gantt[i]).split() 
     
-    
 
 
-    return gantt, power_used, ttime, wtime, ntime
+
+    return gantt, power_used, ttime, wtime, ntime, ready_Q
