@@ -10,7 +10,7 @@ def rr(at, bt, pn, time_quantum, gantt_default):
     line = [None] * len(at)  # 라인 리스트 (연속적인 입력을 위한 기억 리스트)
     timer = 0  # 타이머
     end_time = [None] * len(at)  # end_time
-    gantt = [["" for j in range(sum(bt) + 10)] for j in range(pn)]  # make empty gantt 2 dimensional list
+    gantt = [["" for j in range(min(at) + 1)] for j in range(pn)]  # make empty gantt 2 dimensional list
     power_used = 0
     wtime = [0] * len(at)#NEW
     tq_wait_queue = []  # time_quantum ready_q
@@ -26,6 +26,7 @@ def rr(at, bt, pn, time_quantum, gantt_default):
         while len(tq_wait_queue) != 0:
             ready_queue.append(tq_wait_queue.pop(0))
         for processor_n in range(pn):  # Processor(Core) -> 0부터 시작
+            gantt[processor_n].append('')
             if processor_n in line:  # 만약 라인 리스트에 n번째 프로세서가 잡히면
                 process_num = line.index(processor_n)   # 프로세스 추출
                 if gantt[processor_n][0] == 'P':  # Processor == 'P'
@@ -78,6 +79,8 @@ def rr(at, bt, pn, time_quantum, gantt_default):
                     if t_q_counter[processor_n] != 1 :
                         line[process_num] = processor_n  # 해당 번째 processor를 다음에도 사용하겠습니다.
                         t_q_counter[processor_n] -= 1
+                    else :
+                        tq_wait_queue.append(process_num)
                 else:
                     end_time[process_num] = timer + 1
 
