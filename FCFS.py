@@ -15,7 +15,7 @@ def fcfs(at, bt, pn, gantt_default):
     timer = 0  # 타이머
     end_time = [None] * len(at)  # end_time
     wtime = [0] * len(at) 
-    gantt = [["" for j in range(sum(bt)+10)] for j in range(pn)]  # make empty gantt 2 dimensional list
+    gantt = [["" for j in range(min(at)+1)] for j in range(pn)]  # make empty gantt 2 dimensional list
     power_used = 0
     ready_Q = [[]]
 

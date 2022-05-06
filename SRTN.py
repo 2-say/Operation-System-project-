@@ -7,7 +7,7 @@ def srtn(at, bt, pn, gantt_default):
     bt_copy = copy.deepcopy(bt)
     timer = 0  # 타이머
     end_time = [None] * len(at)  # end_time
-    gantt = [["" for j in range(sum(bt)+10)] for j in range(pn)]  # make empty gantt 2 dimensional list
+    gantt = [["" for j in range(min(at)+1)] for j in range(pn)]  # make empty gantt 2 dimensional list
     power_used = 0
     at_bt = []                  #SPN 추가 2차원 배열 (  [p1(at),p1(bt)] , 저장 ) 
     tmp_at_bt = []
@@ -48,7 +48,6 @@ def srtn(at, bt, pn, gantt_default):
                     end_time[process_num] = timer + 1 
                     at_bt.pop(0)
                 else :
-                    wtime[process_num] -= 1 
                     tmp_at_bt.append(at_bt.pop(0))
             else:  # 빈 것 -> 흰 것
                 gantt[processor_n][timer + 1] = 'White'
@@ -61,9 +60,7 @@ def srtn(at, bt, pn, gantt_default):
         for i in at_bt :
             k = i[0]
             wtime[k] += 1
-
         timer += 1
-
     ttime = time_calculator.turnaround_time(at, end_time)
     ntime = time_calculator.normalized_tt(ttime, bt_copy)
 

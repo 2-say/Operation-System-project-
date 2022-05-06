@@ -14,7 +14,7 @@ def wtt(at, bt, pn, time_quantum, gantt_default):
     check = False
     wtime = [0] * len(at)
     ready_queue_wtime = [0] * len(at)
-    gantt = [["" for j in range(sum(bt)+10)] for j in range(pn)]  # make empty gantt 2 dimensional list
+    gantt = [["" for j in range(min(at)+1)] for j in range(pn)]  # make empty gantt 2 dimensional list
     power_used = 0
 
     for i in range(pn):

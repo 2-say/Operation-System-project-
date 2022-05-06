@@ -11,7 +11,7 @@ def hrrn(at, bt, pn, gantt_default) :
     timer = 0                   # 타이머
     end_time =[None] * len(at)  #end_time
 
-    gantt = [["" for j in range(sum(bt)+10)] for j in range(pn)]     #make empty gantt 2 dimensional list   
+    gantt = [["" for j in range(min(bt)+1)] for j in range(pn)]     #make empty gantt 2 dimensional list   
     power_used = 0
     at_rr = []                  #SPN 추가 2차원 배열 (  [p1(at),p1(rr)] , 저장 ) 
     response_ratio = [0] * len(at)         #Response Ratio
