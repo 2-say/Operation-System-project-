@@ -1,3 +1,4 @@
+
 import col_gantt
 import time_calculator
 import copy
@@ -14,6 +15,7 @@ def rr(at, bt, pn, time_quantum, gantt_default):
     wtime = [0] * len(at)#NEW
     tq_wait_queue = []  # time_quantum ready_q
     t_q_counter = [time_quantum] * pn  # calculate last time_quantum
+    ready_Q = [[]]
 
     for i in range(pn):
         gantt[i][0] = gantt_default[i]  # 간트 차트 초기값 'P','E' 입력
@@ -88,10 +90,10 @@ def rr(at, bt, pn, time_quantum, gantt_default):
             break
 
 
-
         for i in ready_queue :
             wtime[i] += 1
 
+        ready_Q.append(copy.deepcopy(ready_queue))  
         timer += 1
 
     ttime = time_calculator.turnaround_time(at, end_time)
@@ -109,4 +111,5 @@ def rr(at, bt, pn, time_quantum, gantt_default):
 
 
             
-    return gantt, power_used, ttime, wtime, ntime
+    return gantt, power_used, ttime, wtime, ntime ,ready_Q
+
