@@ -10,6 +10,7 @@ def srtn(at, bt, pn, gantt_default):
     gantt = [["" for j in range(sum(bt)+10)] for j in range(pn)]  # make empty gantt 2 dimensional list
     power_used = 0
     at_bt = []                  #SPN 추가 2차원 배열 (  [p1(at),p1(bt)] , 저장 ) 
+    tmp_at_bt = []
     wtime = [0] * len(at)#NEW
 
     for i in range(pn):
@@ -17,10 +18,13 @@ def srtn(at, bt, pn, gantt_default):
 
     while True:  # 무한 반복
         used_core = 0  # 전력이 소비된 프로세서
+        
+        while len(tmp_at_bt) != 0 :
+            at_bt.append(tmp_at_bt.pop())
+        
         if timer in at:  # Arrival_Time -> Ready_Queue
             at_bt.append([at.index(timer),bt[at.index(timer)]]) #해당하는 ArriveTime process 저장 
             at_bt.sort(key=lambda x: (x[1], x[0]))              #burst 적은 값으로 정렬한 후 (오름차순) 
-
 
         for processor_n in range(pn):  # Processor(Core) -> 0부터 시작
             gantt[processor_n].append('')
@@ -45,8 +49,7 @@ def srtn(at, bt, pn, gantt_default):
                     at_bt.pop(0)
                 else :
                     wtime[process_num] -= 1 
-                    break    #bt가 남은 상태에서 다시 wtime 감소 방지 
-
+                    tmp_at_bt.append(at_bt.pop(0))
             else:  # 빈 것 -> 흰 것
                 gantt[processor_n][timer + 1] = 'White'
 
