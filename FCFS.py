@@ -4,17 +4,16 @@ import copy
 
 
 def fcfs(at, bt, pn, gantt_default):
-    bt_copy = copy.deepcopy(bt)
+    #############초기 변수 선언 부분  ##############
+    bt_copy = copy.deepcopy(bt) 
     ready_queue = []  # 레디 큐
     line = [None] * len(at)  # 라인 리스트 (연속적인 입력을 위한 기억 리스트)
     timer = 0  # 타이머
     end_time = [None] * len(at)  # end_time
-
-    wtime = [0] * len(at)#NEW
-
+    wtime = [0] * len(at) 
     gantt = [["" for j in range(sum(bt)+10)] for j in range(pn)]  # make empty gantt 2 dimensional list
-
     power_used = 0
+
 
     for i in range(pn):
         gantt[i][0] = gantt_default[i]  # 간트 차트 초기값 'P','E' 입력
@@ -22,7 +21,15 @@ def fcfs(at, bt, pn, gantt_default):
     while True:  # 무한 반복
         used_core = 0  # 전력이 소비된 프로세서
         if timer in at:  # Arrival_Time -> Ready_Queue
-            ready_queue.append(at.index(timer))
+
+            
+            rest_list = list(filter(lambda x: at[x] == timer, range(len(at))))
+            
+            for i in range(len(rest_list)):
+                ready_queue.append(rest_list[i])
+            
+
+
         
         for processor_n in range(pn):  # Processor(Core) -> 0부터 시작
             gantt[processor_n].append('')
