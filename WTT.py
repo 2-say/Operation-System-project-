@@ -30,8 +30,11 @@ def wtt(at, bt, pn, time_quantum, gantt_default):
             for i in at_bt:
                 ready_queue.append(i[0])  #ready에 정렬된 값을 넣는다.
                 
-        if check == True and max(ready_queue_wtime) >= waiting_tq :
-            ready_queue.insert(0,ready_queue.pop(ready_queue.index(ready_queue_wtime.index(max(ready_queue_wtime)))))
+        if check == True and max(ready_queue_wtime) >= waiting_tq and len(ready_queue) > 1 :
+            max_time = max(ready_queue_wtime)
+            max_wtime_processor_num = ready_queue_wtime.index(max_time)
+            ready_queue.remove(max_wtime_processor_num)
+            ready_queue.insert(0,max_wtime_processor_num)
             check = False
 
         for processor_n in range(pn):  # Processor(Core) -> 0부터 시작
@@ -66,7 +69,7 @@ def wtt(at, bt, pn, time_quantum, gantt_default):
 
             elif len(ready_queue) != 0:  # 레디큐가 안비워져 있으면 && line에 잡히는 것이 없다면
                 process_num = ready_queue.pop(0)  # 첫번째 값을 꺼내고 삭제한다.
-                at_bt.pop(at_bt.index(process_num))
+                at_bt.remove([process_num, bt[process_num]])
 
                 if gantt[processor_n][0] == 'P':
                     bt[process_num] -= 2  # 실행 시간 -2 (P)
