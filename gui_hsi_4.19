@@ -117,8 +117,12 @@ def delete_core():
             e_core -= 1
 
     elif p_core + e_core == 0:
-        for k in processor_canvas_frame.pack_slaves().pop(0).grid_slaves().pop(0).grid_slaves():
-            k.destroy()
+        # for k in processor_canvas_frame.pack_slaves().pop(0).grid_slaves().pop(0).grid_slaves():
+        #     k.destroy()
+        processor_canvas_frame.pack_slaves().pop(0).grid_slaves().pop(0).destroy()
+        tmp = Frame(time_root_frame, height=40, width=900, bg="#ECEFF1")
+        tmp.grid(column=2, row=0, padx=10)
+
 
 def myfunction2(event):
     canvas2.configure(scrollregion=canvas2.bbox("all"), bg="#ECEFF1")
@@ -286,7 +290,7 @@ def update_process(turn_around_time, waiting_time, normalize_time):
 
 color = ['#FFCDD2', '#F8BBD0', '#D1C4E9', '#C5CAE9', 'old lace', 'floral white',
          'linen', 'antique white', 'papaya whip', 'blanched almond', 'bisque', 'peach puff',
-         'navajo white', 'lemon chiffon', 'mint cream', "white"]
+         'navajo white', 'lemon chiffon', 'mint cream', "#ECEFF1"]
 
 color_dic = {"White" : 15, "p1_color" : 0, "p2_color" : 1, "p3_color" : 2, "p4_color" : 3,
                  "p5_color" : 4, "p6_color" : 5, "p7_color" : 6, "p8_color" : 7, "p9_color" : 8, "p10_color" : 9,
@@ -306,7 +310,7 @@ def update_time(n):
     for i in range(n-1):
         processor_frame = processor_canvas_frame.pack_slaves().pop(0)
         seq = processor_frame.grid_slaves().pop(0)
-        box = Label(seq, text = str(i+1), height=2, width=4, font="맑은고딕 11 bold")
+        box = Label(seq, text = str(i+1), height=2, width=4, font="맑은고딕 11 bold", bg= "#ECEFF1")
         box.grid(column=i+1, row=0, padx=3, pady=3)
 
 def update_processor(gantt_chart):
@@ -315,6 +319,18 @@ def update_processor(gantt_chart):
         update_label(gantt_chart, i)
         root.update()
         time.sleep(0.2)
+
+def clear_rabels(size):
+    for j in range(size):
+        delete_chart = processor_canvas_frame.pack_slaves().pop(j + 1).grid_slaves().pop(0)
+        for k in delete_chart.grid_slaves():
+            k.destroy()
+
+def clear_time(size):
+    for i in range(size-1):
+        delete_time = processor_canvas_frame.pack_slaves().pop(0).grid_slaves().pop(0)
+        for k in delete_time.grid_slaves():
+            k.destroy()
 
 # run
 def run():
@@ -337,6 +353,9 @@ def run():
 
     gantt_chart, power_used, turn_around_time, waiting_time, normalize_time = \
         team_operator.operator(core, scheduling_type, time_quantum, process_arrival_time, process_burst_time, )
+
+    clear_rabels(len(gantt_chart))
+    clear_time(len(gantt_chart[0]))
 
     update_process(turn_around_time, waiting_time, normalize_time)
     update_processor(gantt_chart)
@@ -361,7 +380,6 @@ def clear_variables():
     time_quantum = 0
     process_arrival_time.clear()
     process_burst_time.clear()
-
 
 # CLEAR all
 def clear():
