@@ -70,6 +70,7 @@ def wtt(at, bt, pn, time_quantum, gantt_default):
             elif len(ready_queue) != 0:  # 레디큐가 안비워져 있으면 && line에 잡히는 것이 없다면
                 process_num = ready_queue.pop(0)  # 첫번째 값을 꺼내고 삭제한다.
                 at_bt.remove([process_num, bt[process_num]])
+                ready_queue_wtime[process_num] = 0
 
                 if gantt[processor_n][0] == 'P':
                     bt[process_num] -= 2  # 실행 시간 -2 (P)
