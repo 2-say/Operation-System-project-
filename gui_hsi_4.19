@@ -450,9 +450,13 @@ readyQ_frame.grid(column=2, row=0, padx=10)
 time_root_frame = LabelFrame(core_frame, height=3, width=900, bg=bg_color, relief="flat")
 time_root_frame.pack(side="top", fill="both")
 
-sequence = Label(time_root_frame, text="Time", height=2, width=10, bg=bg_color)
+sequence = Label(time_root_frame, text="Time", height=2, width=6, bg=bg_color)
 sequence.config(font="맑은고딕 8 bold")
-sequence.grid(column=1, row=0, padx=2)
+sequence.grid(column=0, row=0, padx=2)
+
+time_0 = Label(time_root_frame, text="0", height=2, width=4, bg=bg_color)
+time_0.config(font="맑은고딕 11 bold")
+time_0.grid(column=1, row=0, padx=2)
 
 # Time Frame
 time_frame = Frame(time_root_frame,height=40, width=900, bg=bg_color)
