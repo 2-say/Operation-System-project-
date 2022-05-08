@@ -3,7 +3,7 @@ import RR
 import SPN
 import SRTN
 import HRRN
-import WTT
+import WTQ
 
 def operator(gantt_type, scheduling_type, tq, at, bt):
     processor_number = len(gantt_type)  # Processor(Core) 개수
@@ -23,5 +23,5 @@ def operator(gantt_type, scheduling_type, tq, at, bt):
     elif scheduling_type == "HRRN":
         return HRRN.hrrn(at, bt, processor_number, gantt_type)
 
-    elif scheduling_type == "WTT":
-        return WTT.wtt(at, bt, processor_number, gantt_type)
+    elif scheduling_type == "WTQ":
+        return WTQ.wtq(at, bt, processor_number, tq, gantt_type)
