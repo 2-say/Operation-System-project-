@@ -302,7 +302,7 @@ lab_scheduling_type = Label(input_frame, text="SCHEDULING TYPE", width=15, bg=co
 lab_scheduling_type.config(font="맑은고딕 10")
 lab_scheduling_type.grid(column=1, row=0, padx=10, pady=10)
 
-opt_scheduling_type = ["FCFS", "RR", "SPN", "SRTN", "HRRN", "WTT"]
+opt_scheduling_type = ["FCFS", "RR", "SPN", "SRTN", "HRRN", "WTQ"]
 
 cmb_scheduling_type = ttk.Combobox(input_frame, state="readonly", values=opt_scheduling_type, width=8)
 cmb_scheduling_type.current(0)
