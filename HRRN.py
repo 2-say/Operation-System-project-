@@ -2,10 +2,9 @@ import col_gantt
 import time_calculator
 import copy
 
-
 def hrrn(arrival_time, burst_time, core_count, core_type):
     # 변수 ########################################################
-    arrival_time_and_response_ratio = []  # SPN 추가 2차원 배열 (  [p1(arrival_time),p1(rr)] , 저장 )
+    process_number_and_response_ratio = []  # HRRN 추가 2차원 배열 (  [p1(process_number),p1(rr)] , 저장 )
     response_ratio = [0] * len(arrival_time)  # Response Ratio
     gantt_chart = [["" for j in range(sum(burst_time) + 10)] for j in
                    range(core_count)]  # make empty gantt_chart 2 dimensional list
@@ -13,7 +12,7 @@ def hrrn(arrival_time, burst_time, core_count, core_type):
 
     # 공통
     ready_queue = []  # 레디 큐
-    line = [None] * len(arrival_time)  # 라인 (비선점에서 어떤 core에서 진행중이었는지 기억)
+    line = [None] * len(arrival_time)  # 라인 (어떤 core에서 진행중이었는지 기억)
     end_time = [None] * len(arrival_time)  # 각 프로세스별 end_time
     waiting_time = [0] * len(arrival_time)  # 각 프로세스별 waiting_time
     time = 0  # 시간
@@ -39,9 +38,9 @@ def hrrn(arrival_time, burst_time, core_count, core_type):
             # arrival_time 중복 처리
             tmp_list = list(filter(lambda x: arrival_time[x] == time, range(len(arrival_time))))
             for i in range(len(tmp_list)):
-                arrival_time_and_response_ratio.append([tmp_list[i], burst_time[tmp_list[i]]])
+                process_number_and_response_ratio.append([tmp_list[i], burst_time[tmp_list[i]]])
                 ready_queue.append(tmp_list[i])
-            # arrival_time_and_response_ratio.append([arrival_time.index(time), burst_time[arrival_time.index(time)]])  # 해당하는 ArriveTime process 저장
+            # process_number_and_response_ratio.append([arrival_time.index(time), burst_time[arrival_time.index(time)]])  # 해당하는 ArriveTime process 저장
             # ready_queue.append(arrival_time.index(time))  # ready에 정렬된 값을 넣는다.
 
         # 작업을 진행중이지 않은 core가 생길 때마다 response ratio 확인
@@ -50,13 +49,13 @@ def hrrn(arrival_time, burst_time, core_count, core_type):
             ready_queue = []
 
             # 각 프로세스 별 response_ratio 계산
-            for x in arrival_time_and_response_ratio:
+            for x in process_number_and_response_ratio:
                 response_ratio[x[0]] = (waiting_time[x[0]] + burst_time[x[0]]) / burst_time[x[0]]
                 x[1] = response_ratio[x[0]]
 
             # response_ratio를 기준으로 정렬
-            arrival_time_and_response_ratio.sort(key=lambda x: (x[1], x[0]), reverse=True)
-            for i in arrival_time_and_response_ratio:
+            process_number_and_response_ratio.sort(key=lambda x: (x[1], x[0]), reverse=True)
+            for i in process_number_and_response_ratio:
                 ready_queue.append(i[0])
 
             check = False
@@ -109,7 +108,7 @@ def hrrn(arrival_time, burst_time, core_count, core_type):
                 # 첫번째 Process를 꺼내고 ready_queue에서 삭제
                 process = ready_queue.pop(0)
                 # ready_queue와 같은 상태를 맞춰주기 위해 같이 삭제
-                arrival_time_and_response_ratio.pop(0)
+                process_number_and_response_ratio.pop(0)
 
                 # 현재 코어가 P 이면
                 if gantt_chart[core][0] == 'P':
