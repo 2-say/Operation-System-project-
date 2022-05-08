@@ -1,19 +1,15 @@
-# 최근 수정일 : 5월 7 14:32 조경우
-# 변수명 변경 및 주석 추가
-
 import col_gantt
 import time_calculator
 import copy
 
 def spn(arrival_time, burst_time, core_count, core_type):
     # 변수 ########################################################
-    arrival_and_burst_time = []  # SPN 추가 2차원 배열 (  [p1(arrival_time),p1(burst_time)] , 저장 )
-    gantt_chart = [["" for _ in range(sum(burst_time) + 10)] for _ in
-                   range(core_count)]  # make empty gantt_chart 2 dimensional list
+    process_number_and_burst_time = []  # SPN 추가 2차원 배열 (  [p1(process_number),p1(burst_time)] , 저장 )
+    gantt_chart = [["" for _ in range(sum(burst_time) + 10)] for _ in range(core_count)]  # make empty gantt_chart 2 dimensional list
 
     # 공통
     ready_queue = []  # 레디 큐
-    line = [None] * len(arrival_time)  # 라인 (비선점에서 어떤 core에서 진행중이었는지 기억)
+    line = [None] * len(arrival_time)  # 라인 (어떤 core에서 진행중이었는지 기억)
     end_time = [None] * len(arrival_time)  # 각 프로세스별 end_time
     waiting_time = [0] * len(arrival_time)  # 각 프로세스별 waiting_time
     time = 0  # 시간
@@ -42,12 +38,12 @@ def spn(arrival_time, burst_time, core_count, core_type):
             # arrival_time 중복 처리
             tmp_list = list(filter(lambda x: arrival_time[x] == time, range(len(arrival_time))))
             for i in range(len(tmp_list)):
-                arrival_and_burst_time.append([tmp_list[i], burst_time[tmp_list[i]]])
+                process_number_and_burst_time.append([tmp_list[i], burst_time[tmp_list[i]]])
 
             # burst_time 작은 순서대로 정렬
-            arrival_and_burst_time.sort(key=lambda x: (x[1], x[0]))
+            process_number_and_burst_time.sort(key=lambda x: (x[1], x[0]))
             # ready에 정렬된 값 삽입
-            for i in arrival_and_burst_time:
+            for i in process_number_and_burst_time:
                 ready_queue.append(i[0])
         ######################################################
 
@@ -56,7 +52,6 @@ def spn(arrival_time, burst_time, core_count, core_type):
         for core in range(core_count):
             # gantt_chart 한칸 생성
             gantt_chart[core].append('')
-
             # line에 현재 core가 존재하면 현재 core에서 진행중이었던 Process가 있다는 뜻
             if core in line:
                 # 프로세스 추출
@@ -92,7 +87,7 @@ def spn(arrival_time, burst_time, core_count, core_type):
                 # 첫번째 Process를 꺼내고 ready_queue에서 삭제
                 process = ready_queue.pop(0)
                 # ready_queue와 같은 상태를 맞춰주기 위해 같이 삭제
-                arrival_and_burst_time.pop(0)
+                process_number_and_burst_time.pop(0)
 
                 # 현재 코어가 P 이면
                 if gantt_chart[core][0] == 'P':
@@ -106,16 +101,16 @@ def spn(arrival_time, burst_time, core_count, core_type):
                     power_used += 1  # 1W (E)
                     used_core += 1  # 전력 소비
 
-                    # 실행시간이 남아있으면 line에 추가
-                    if burst_time[process] > 0:
-                        line[process] = core
+                # 실행시간이 남아있으면 line에 추가
+                if burst_time[process] > 0:
+                    line[process] = core
 
-                    # 실행시간이 남아있지 않으면 line에 추가하지 않음
-                    else:
-                        end_time[process] = time + 1
+                # 실행시간이 남아있지 않으면 line에 추가하지 않음
+                else:
+                    end_time[process] = time + 1
 
-                    # 간트차트에 추가
-                    gantt_chart[core][time + 1] = col_gantt.colors(process)
+                # 간트차트에 추가
+                gantt_chart[core][time + 1] = col_gantt.colors(process)
 
             # line과 ready_queue 모두 비워져있으면 현재 코어는 대기상태
             else:
