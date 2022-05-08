@@ -1,6 +1,3 @@
-# 최근 수정일 : 5월 7 14:32 조경우
-# 변수명 변경 및 주석 추가
-
 import col_gantt
 import time_calculator
 import copy
@@ -14,7 +11,7 @@ def rr(arrival_time, burst_time, core_count, time_quantum, core_type):
     
     # 공통
     ready_queue = []  # 레디 큐
-    line = [None] * len(arrival_time)  # 라인 (비선점에서 어떤 core에서 진행중이었는지 기억)
+    line = [None] * len(arrival_time)  # 라인 (어떤 core에서 진행중이었는지 기억)
     end_time = [None] * len(arrival_time)  # 각 프로세스별 end_time
     waiting_time = [0] * len(arrival_time)  # 각 프로세스별 waiting_time
     time = 0  # 시간
