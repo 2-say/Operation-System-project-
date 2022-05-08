@@ -11,7 +11,7 @@ color = ['#FFCDD2', '#F8BBD0', '#D1C4E9', '#C5CAE9', 'old lace', 'floral white',
          'navajo white', 'lemon chiffon', 'mint cream', bg_color]
 color_dic = {"White" : 15, "p1_color" : 0, "p2_color" : 1, "p3_color" : 2, "p4_color" : 3,
                  "p5_color" : 4, "p6_color" : 5, "p7_color" : 6, "p8_color" : 7, "p9_color" : 8, "p10_color" : 9,
-                 "p11_color" : 10, "p13_color" : 11, "p11_color" : 12, "p11_color" : 13, "p11_color" : 14}
+                 "p11_color" : 10, "p12_color" : 11, "p13_color" : 12, "p14_color" : 13, "p15_color" : 14}
 ####################################
 
 # Variables ########################
